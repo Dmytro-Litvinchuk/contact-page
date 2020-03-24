@@ -1,0 +1,81 @@
+<?php
+
+/**
+ * @file
+ * Contains contact_entity.module.
+ */
+
+use Drupal\Component\Utility\SafeMarkup;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_help().
+ */
+function contact_entity_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the contact_entity module.
+    case 'help.page.contact_entity':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Custom entity for contact') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Recommend for use, but not require...
+ * Implements hook_mail().
+ */
+function contact_entity_mail($key, &$message, $params) {
+   $options = [
+    'langcode' => $message['langcode'],
+  ];
+  switch ($key) {
+    case 'contact_message':
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      $message['subject'] = t('User have subscribed, his telephone: @telephone', ['@phone' => $params['telephone']], $options);
+      $message['body'][] = SafeMarkup::checkPlain($params['message']);
+      break;
+  }
+}
+
+/**
+ * Create email only for created entity.
+ * Implements hook_entity_insert().
+ */
+function contact_entity_entity_insert(EntityInterface $entity) {
+  if ($entity->getEntityTypeId() !== 'contact_entity') {
+   return;
+  }
+  $mailManager = \Drupal::service('plugin.manager.mail');
+  $module = 'contact_entity';
+  $key = 'contact_message';
+  $to = $entity->get('email')->getString();
+  $params['message'] = $entity->get('message')->getValue();
+  $params['telephone'] = $entity->get('telephone')->getString();
+  $language_code = $entity->language()->getId();
+  $send_now = TRUE;
+  $mail = $mailManager->mail($module, $key, $to, $language_code, $params, NULL, $send_now);
+  if ($mail['result'] == TRUE) {
+    drupal_set_message(t('Your message has been sent.'));
+  }
+  else {
+    drupal_set_message(t('There was a problem sending your message and it was not sent.'), 'error');
+  }
+}
+
+/**
+ * Implements hook_mail_alter().
+ */
+function contact_entity_mail_alter(&$message) {
+  // Id is module name plus key.
+  if (!empty($message['id']) && $message['id'] == 'contact_entity_contact_message') {
+    $reverse = $message['from'];
+    $message['from'] = $message['to'];
+    $message['to'] = $reverse;
+  }
+  // dpm($message); // For debug via devel.
+}

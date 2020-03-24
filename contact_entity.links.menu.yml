@@ -1,0 +1,14 @@
+
+# Contact entity menu items definition
+entity.contact_entity.collection:
+  title: 'Contact entity list'
+  route_name: entity.contact_entity.collection
+  description: 'List Contact entity entities'
+  parent: system.admin_structure
+  weight: 100
+
+contact_entity.admin.structure.settings:
+  title: 'Contact entity settings'
+  description: 'Configure Contact entity entities'
+  route_name: contact_entity.settings
+  parent: system.admin_structure
