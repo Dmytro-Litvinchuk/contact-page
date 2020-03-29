@@ -3,3 +3,5 @@ type: module
 description: 'Custom entity for contact'
 core: 8.x
 package: 'Custom'
+# Add configure link.
+configure: contact_entity.settings

@@ -29,9 +29,6 @@ use Drupal\Core\Entity\EntityTypeInterface;
  *       "edit" = "Drupal\contact_entity\Form\ContactEntityForm",
  *       "delete" = "Drupal\contact_entity\Form\ContactEntityDeleteForm",
  *     },
- *     "route_provider" = {
- *       "html" = "Drupal\contact_entity\ContactEntityHtmlRouteProvider",
- *     },
  *     "access" = "Drupal\contact_entity\ContactEntityAccessControlHandler",
  *   },
  *   base_table = "contact_entity",
@@ -95,8 +92,9 @@ class ContactEntity extends ContentEntityBase implements ContactEntityInterface 
     // Add the published field.
     $fields += static::publishedBaseFieldDefinitions($entity_type);
 
+    // Validation via Email Constraint.
     $fields['email'] = BaseFieldDefinition::create('email')
-      ->setLabel(t('Email Address'))
+      ->setLabel(t('Email Address'))->addConstraint('CustomEmail')
       ->setDescription(t('The Email Address.'))
       ->setRequired(TRUE)
       ->setSettings([
@@ -110,7 +108,7 @@ class ContactEntity extends ContentEntityBase implements ContactEntityInterface 
         'weight' => -4,
       ])
       ->setDisplayOptions('form', [
-        'type' => 'email_default',
+        'type' => 'string_textfield',
         'weight' => -4,
       ])
       ->setDisplayConfigurable('form', TRUE)

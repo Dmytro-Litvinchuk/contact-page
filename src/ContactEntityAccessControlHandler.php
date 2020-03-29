@@ -28,7 +28,6 @@ class ContactEntityAccessControlHandler extends EntityAccessControlHandler {
           return AccessResult::allowedIfHasPermission($account, 'view unpublished contact entity entities');
         }
 
-
         return AccessResult::allowedIfHasPermission($account, 'view published contact entity entities');
 
       case 'update':
@@ -40,7 +39,7 @@ class ContactEntityAccessControlHandler extends EntityAccessControlHandler {
         return AccessResult::allowedIfHasPermission($account, 'delete contact entity entities');
     }
 
-    // Unknown operation, no opinion.
+    // Unknown operation.
     return AccessResult::neutral();
   }
 

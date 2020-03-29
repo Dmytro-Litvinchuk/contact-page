@@ -64,36 +64,14 @@ class ContactEntityForm extends ContentEntityForm {
   public function buildForm(array $form, FormStateInterface $form_state) {
     /* @var \Drupal\contact_entity\Entity\ContactEntity $entity */
     $form = parent::buildForm($form, $form_state);
-    /*$vid = 'tags';
-    $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($vid);
-    foreach ($terms as $term) {
-      $options[$term->tid] = $term->tid;
-    }
-    $form['speciality'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Submission category'),
-      '#options' => $options,
-    ];
-    $form['telephone']['widget'][0]['value']['#type'] = 'tel';*/
-    // Check Authentication.
+    // Check Authentication and hide some field.
     if ($this->account->isAuthenticated()) {
       $form['email']['#attributes']['hidden'] = TRUE;
     }
     else {
       $form['user_id']['#attributes']['hidden'] = TRUE;
     }
-    // Add validation for email.
-    // $form['#validate'][] = '::validateEmail';
     return $form;
-  }
-
-  /**
-   * Check user email.
-   */
-  public function validateEmail(array &$form, FormStateInterface $form_state) {
-    if (!$form_state->isValueEmpty('email') && !$this->emailValidator->isValid($form_state->getValue('email'))) {
-      $form_state->setErrorByName('email', t('The email address %mail is not valid.', ['%mail' => $form_state->getValue('email')]));
-    }
   }
 
   /**
@@ -101,7 +79,7 @@ class ContactEntityForm extends ContentEntityForm {
    */
   public function save(array $form, FormStateInterface $form_state) {
     $entity = $this->entity;
-    $status = parent::save($form, $form_state);
+    parent::save($form, $form_state);
     // Redirect after save in DB.
     $form_state->setRedirect('entity.contact_entity.canonical', ['contact_entity' => $entity->id()]);
   }

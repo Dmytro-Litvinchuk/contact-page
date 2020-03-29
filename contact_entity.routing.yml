@@ -1,0 +1,47 @@
+entity.contact_entity.canonical:
+  path: '/admin/structure/contact_entity/{contact_entity}'
+  defaults:
+    _entity_view: 'contact_entity'
+    _title: 'Contact entity content'
+  requirements:
+    _entity_access: 'contact_entity.view'
+
+entity.contact_entity.collection:
+  path: '/admin/structure/contact_entity'
+  defaults:
+    _entity_list: 'contact_entity'
+    _title: 'Contact list'
+  requirements:
+    _permission: 'administer contact entity entities'
+
+entity.contact_entity.add_form:
+  path: '/admin/structure/contact_entity/add'
+  defaults:
+    _entity_form: 'contact_entity.add'
+    _title: 'Add contact'
+  requirements:
+    _entity_create_access: 'contact_entity'
+
+entity.contact_entity.edit_form:
+  path: '/admin/structure/contact_entity/{contact_entity}/edit'
+  defaults:
+    _entity_form: 'contact_entity.edit'
+    _title: 'Edit contact'
+  requirements:
+    _entity_access: 'contact_entity.update'
+
+entity.contact_entity.delete_form:
+  path: '/admin/structure/contact_entity/{contact_entity}/delete'
+  defaults:
+    _entity_form: 'contact_entity.delete'
+    _title: 'Delete contact'
+  requirements:
+    _entity_access: 'contact_entity.delete'
+
+contact_entity.settings:
+  path: '/admin/structure/contact_entity/settings'
+  defaults:
+    _form: 'Drupal\contact_entity\Form\ContactEntitySettingsForm'
+    _title: 'Contact settings'
+  requirements:
+    _permission: 'administer contact entity entities'

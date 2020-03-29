@@ -2,6 +2,7 @@
 
 namespace Drupal\contact_entity\Form;
 
+use Drupal\contact_entity\Event\ContactEntityEvent;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -31,7 +32,10 @@ class ContactEntitySettingsForm extends FormBase {
    *   The current state of the form.
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    // Empty implementation of the abstract submit class.
+    $dispatcher = \Drupal::service('event_dispatcher');
+    $variables = $form_state->getValue('message');
+    $event = new ContactEntityEvent($variables);
+    $dispatcher->dispatch(ContactEntityEvent::CONTACT_FORM, $event);
   }
 
   /**
@@ -47,6 +51,15 @@ class ContactEntitySettingsForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['contactentity_settings']['#markup'] = 'Settings form for Contact entity entities. Manage field settings here.';
+    $form['message'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Message'),
+    ];
+
+    $form['actions']['submit'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Submit'),
+    ];
     return $form;
   }
 
