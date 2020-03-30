@@ -2,7 +2,6 @@
 
 namespace Drupal\contact_entity\EventSubscriber;
 
-use Drupal\contact_entity\Event\ContactEntityEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -19,13 +18,18 @@ class ContactEntitySubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents() {
     return [
-      KernelEvents::REQUEST => ['someH'],
+      KernelEvents::REQUEST => ['redirect'],
     ];
   }
 
-  public function someH(GetResponseEvent $event) {
+  /**
+   * 
+   *
+   * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
+   */
+  public function redirect(GetResponseEvent $event) {
     $messenger = \Drupal::service('messenger');
-    $messenger->addMessage('$vasa');
+    $messenger->addMessage('Some text...');
   }
 
 }

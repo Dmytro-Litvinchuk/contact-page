@@ -2,8 +2,7 @@
 
 namespace Drupal\contact_entity\Form;
 
-use Drupal\contact_entity\Event\ContactEntityEvent;
-use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -11,7 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
  *
  * @ingroup contact_entity
  */
-class ContactEntitySettingsForm extends FormBase {
+class ContactEntitySettingsForm extends ConfigFormBase {
 
   /**
    * Returns a unique string identifying the form.
@@ -23,44 +22,34 @@ class ContactEntitySettingsForm extends FormBase {
     return 'contactentity_settings';
   }
 
+
   /**
-   * Form submission handler.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
+   * @inheritDoc
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
-    $dispatcher = \Drupal::service('event_dispatcher');
-    $variables = $form_state->getValue('message');
-    $event = new ContactEntityEvent($variables);
-    $dispatcher->dispatch(ContactEntityEvent::CONTACT_FORM, $event);
+  protected function getEditableConfigNames() {
+    return [
+      'contactentity.settings',
+    ];
   }
 
-  /**
-   * Defines the settings form for Contact entity entities.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   *
-   * @return array
-   *   Form definition array.
-   */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['contactentity_settings']['#markup'] = 'Settings form for Contact entity entities. Manage field settings here.';
-    $form['message'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Message'),
+    $config = $this->config('contactentity.settings');
+    $form['text'] = [
+      '#markup' => 'Limited operating mode:',
     ];
+    $form['login_mode'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Set the site into Login Only mode'),
+      '#default_value' => $config->get('login_mode'),
+    ];
+    return parent::buildForm($form, $form_state);
+  }
 
-    $form['actions']['submit'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('Submit'),
-    ];
-    return $form;
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    $this->config('contactentity.settings')
+      ->set('login_mode', $form_state->getValue('login_mode'))
+      ->save();
+    parent::submitForm($form, $form_state);
   }
 
 }
