@@ -3,7 +3,6 @@
 namespace Drupal\contact_entity\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Component\Utility\EmailValidator;
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
@@ -24,11 +23,6 @@ class ContactEntityForm extends ContentEntityForm {
   protected $account;
 
   /**
-   * @var \Drupal\Component\Utility\EmailValidator
-   */
-  protected $emailValidator;
-
-  /**
    * ContactEntityForm constructor.
    *
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
@@ -37,10 +31,9 @@ class ContactEntityForm extends ContentEntityForm {
    * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface|NULL $entity_type_bundle_info
    * @param \Drupal\Component\Datetime\TimeInterface|NULL $time
    */
-  public function __construct(EntityRepositoryInterface $entity_repository, AccountInterface $account, EmailValidator $email_validator, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL, TimeInterface $time = NULL) {
+  public function __construct(EntityRepositoryInterface $entity_repository, AccountInterface $account, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL, TimeInterface $time = NULL) {
     parent::__construct($entity_repository, $entity_type_bundle_info, $time);
     $this->account = $account;
-    $this->emailValidator = $email_validator;
   }
 
   /**
@@ -52,7 +45,6 @@ class ContactEntityForm extends ContentEntityForm {
     return new static(
       $container->get('entity.repository'),
       $container->get('current_user'),
-      $container->get('email.validator'),
       $container->get('entity_type.bundle.info'),
       $container->get('datetime.time')
     );
@@ -81,7 +73,7 @@ class ContactEntityForm extends ContentEntityForm {
     $entity = $this->entity;
     parent::save($form, $form_state);
     // Redirect after save in DB.
-    $form_state->setRedirect('entity.contact_entity.canonical', ['contact_entity' => $entity->id()]);
+    $form_state->setRedirect('view.own_contact.page_1', ['user' => $this->account->id()]);
   }
 
 }

@@ -38,6 +38,7 @@ entity.contact_entity.delete_form:
   requirements:
     _entity_access: 'contact_entity.delete'
 
+# Config module form
 contact_entity.settings:
   path: '/admin/structure/contact_entity/settings'
   defaults:
@@ -45,3 +46,12 @@ contact_entity.settings:
     _title: 'Contact settings'
   requirements:
     _permission: 'administer contact entity entities'
+
+# Routing for user page
+entity.contact_entity.add_form_user_page:
+  path: '/user/{user}/contact_entity/add'
+  defaults:
+    _entity_form: 'contact_entity.add'
+    _title: 'Add contact'
+  requirements:
+    _entity_create_access: 'contact_entity'

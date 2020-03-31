@@ -1,12 +1,12 @@
-# Link on routing collection
+# Link on routing collection for entity list builder.
 entity.contact_entity.add_form:
   route_name: entity.contact_entity.add_form
-  title: 'Add Contact entity'
+  title: 'Contact page'
   appears_on:
     - entity.contact_entity.collection
 
 view.own_contact.page_1:
   route_name: view.own_contact.page_1
-  title: 'Own list'
+  title: 'Submission list'
   appears_on:
     - entity.contact_entity.collection

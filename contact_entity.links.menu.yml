@@ -1,4 +1,3 @@
-
 # Contact entity menu items definition
 entity.contact_entity.collection:
   title: 'Contact entity list'
