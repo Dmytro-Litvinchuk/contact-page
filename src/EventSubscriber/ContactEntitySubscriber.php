@@ -23,14 +23,22 @@ class ContactEntitySubscriber implements EventSubscriberInterface {
    */
   protected $account;
 
+  /**
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
   protected $messenger;
 
+  /**
+   * @var \Drupal\Core\Config\ConfigFactory
+   */
   protected $configFactory;
 
   /**
    * ContactEntitySubscriber constructor.
    *
    * @param \Drupal\Core\Session\AccountInterface $account
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   * @param \Drupal\Core\Config\ConfigFactory $configFactory
    */
   public function __construct(AccountInterface $account, MessengerInterface $messenger, ConfigFactory $configFactory) {
     $this->account = $account;
