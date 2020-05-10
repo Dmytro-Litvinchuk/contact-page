@@ -76,17 +76,24 @@ class ContactEntitySubscriber implements EventSubscriberInterface {
     }
     // Route that authenticated user can access.
     $routes_authenticated = [
-      'entity.user.canonical', 'entity.user.edit_form',
-      'view.own_contact.page_1', 'entity.contact_entity.add_form_user_page',
-      'user.logout', 'entity.contact_entity.canonical',
-      'entity.contact_entity.edit_form', 'entity.contact_entity.delete_form',
+      'entity.user.canonical',
+      'entity.user.edit_form',
+      'view.own_contact.page_1',
+      'entity.contact_entity.add_form_user_page',
+      'user.logout',
+      'entity.contact_entity.canonical',
+      'entity.contact_entity.edit_form',
+      'entity.contact_entity.delete_form',
     ];
     // Route that anonymous user can access.
     $routes_anonymous = [
-      'user.register', 'user.login', 'user.pass', 'user.pass.http',
-      'user.login', 'user.login.http',
+      'user.register',
+      'user.login',
+      'user.pass',
+      'user.pass.http',
+      'user.login',
+      'user.login.http',
     ];
-    $name = $this->account->getAccountName();
     // Redirect to user page.
     if ($this->account->isAuthenticated() && !in_array($route_name, $routes_authenticated)) {
       $event->setResponse(new RedirectResponse(\Drupal::url('entity.user.canonical',

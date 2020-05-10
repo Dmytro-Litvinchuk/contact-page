@@ -1,6 +1,3 @@
-uuid: 83f76c5f-3206-4f34-b530-b611ddcec543
-langcode: en
-status: true
 dependencies:
   config:
     - field.storage.user.user_picture
@@ -10,8 +7,6 @@ dependencies:
     - image
     - text
     - user
-_core:
-  default_config_hash: umVAw0lF5OPPoYT5lHM2mLcJJsjvO84FpGltWGWyQ7s
 id: own_contact
 label: 'Submission list'
 module: views
